@@ -151,11 +151,11 @@ public class CodeInput extends View {
         underlinePaint = new Paint();
         underlinePaint.setColor(underlineColor);
         underlinePaint.setStrokeWidth(underlineStrokeWidth);
-        underlinePaint.setStyle(android.graphics.Paint.Style.STROKE);
+        underlinePaint.setStyle(Paint.Style.STROKE);
         underlineSelectedPaint = new Paint();
         underlineSelectedPaint.setColor(underlineSelectedColor);
         underlineSelectedPaint.setStrokeWidth(underlineStrokeWidth);
-        underlineSelectedPaint.setStyle(android.graphics.Paint.Style.STROKE);
+        underlineSelectedPaint.setStyle(Paint.Style.STROKE);
         textPaint = new Paint();
         textPaint.setTextSize(textSize);
         textPaint.setColor(textColor);
@@ -198,7 +198,7 @@ public class CodeInput extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES), (int) viewHeight, oldw, oldh);
+        super.onSizeChanged((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES) + 20, (int) viewHeight, oldw, oldh);
         height = h;
         initUnderline();
     }
@@ -206,7 +206,7 @@ public class CodeInput extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES), (int) viewHeight);
+        setMeasuredDimension((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES) + 20, (int) viewHeight);
     }
 
     private void initUnderline() {
@@ -241,13 +241,13 @@ public class CodeInput extends View {
         mInputType = inputType;
     }
 
-    @Override
-    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        outAttrs.actionLabel = null;
-        outAttrs.inputType = mInputType;
-        outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
-        return new BaseInputConnection(this, true);
-    }
+//    @Override
+//    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+//        outAttrs.actionLabel = null;
+//        outAttrs.inputType = mInputType;
+//        outAttrs.imeOptions = EditorInfo.IME_ACTION_DONE;
+//        return new BaseInputConnection(this, true);
+//    }
 
     @Override
     public boolean onCheckIsTextEditor() {
@@ -360,11 +360,23 @@ public class CodeInput extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
+        int padding = 30;
+
         for (int i = 0; i < underlines.length; i++) {
             Underline sectionpath = underlines[i];
-            float fromX = sectionpath.getFromX() + reduction;
+            float fromX = 0;
+            float toX = 0;
+            if ( i > 0){
+                fromX = sectionpath.getFromX() + reduction + padding;
+                toX = sectionpath.getToX() - reduction + padding;
+            }else {
+                fromX = sectionpath.getFromX() + reduction;
+                toX = sectionpath.getToX() - reduction;
+            }
+
             float fromY = sectionpath.getFromY();
-            float toX = sectionpath.getToX() - reduction;
+
             float toY = sectionpath.getToY();
             drawSection(i, fromX, fromY, toX, toY, canvas);
             if (characters.toArray().length > i && characters.size() != 0) {
