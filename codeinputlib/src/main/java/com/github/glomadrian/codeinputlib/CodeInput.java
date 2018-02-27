@@ -13,9 +13,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.inputmethod.BaseInputConnection;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
 import com.github.glomadrian.codeinputlib.data.FixedStack;
@@ -63,6 +60,8 @@ public class CodeInput extends View {
     private boolean underlined = true;
     private String hintText;
     private int mInputType;
+    private final int padding = 30;
+
 
     private codeReadyListener listener;
 
@@ -198,7 +197,7 @@ public class CodeInput extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES) + 20, (int) viewHeight, oldw, oldh);
+        super.onSizeChanged((int) ((underlineWidth + underlineReduction + padding) * DEFAULT_CODES), (int) viewHeight, oldw, oldh);
         height = h;
         initUnderline();
     }
@@ -206,7 +205,7 @@ public class CodeInput extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        setMeasuredDimension((int) ((underlineWidth + underlineReduction) * DEFAULT_CODES) + 20, (int) viewHeight);
+        setMeasuredDimension((int) ((underlineWidth + underlineReduction + padding) * DEFAULT_CODES) + 90, (int) viewHeight);
     }
 
     private void initUnderline() {
@@ -360,9 +359,6 @@ public class CodeInput extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
-        int padding = 30;
-
         for (int i = 0; i < underlines.length; i++) {
             Underline sectionpath = underlines[i];
             float fromX = 0;
