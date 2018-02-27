@@ -1,1 +1,1 @@
-include ':codeinputlib'
+include ':app', ':codeinputlib'
