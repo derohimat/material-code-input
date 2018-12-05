@@ -7,21 +7,22 @@ import java.util.Stack;
  */
 public class FixedStack<T> extends Stack<T> {
 
-  int maxSize = 0;
+    int maxSize = 0;
 
-  @Override public T push(T object) {
-    if (maxSize > size()) {
-      return super.push(object);
+    @Override
+    public T push(T object) {
+        if (maxSize > size()) {
+            return super.push(object);
+        }
+
+        return object;
     }
 
-    return object;
-  }
+    public int getMaxSize() {
+        return maxSize;
+    }
 
-  public int getMaxSize() {
-    return maxSize;
-  }
-
-  public void setMaxSize(int maxSize) {
-    this.maxSize = maxSize;
-  }
+    public void setMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+    }
 }

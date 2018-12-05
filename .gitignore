@@ -100,3 +100,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
+
+app/src/\.DS_Store
+
+codeinputlib/src/\.DS_Store

@@ -32,6 +32,7 @@ public class CodeInput extends View {
     private static final int DEFAULT_CODES = 6;
     private static final String KEYCODE = "KEYCODE_";
     private static final Pattern KEYCODE_PATTERN = Pattern.compile(KEYCODE + "(\\w" + ")");
+    private final int padding = 30;
     private FixedStack<Character> characters;
     private Underline underlines[];
     private Paint underlinePaint;
@@ -63,9 +64,6 @@ public class CodeInput extends View {
     private boolean underlined = true;
     private String hintText;
     private int mInputType;
-    private final int padding = 30;
-
-
     private codeReadyListener listener;
 
     public CodeInput(Context context) {
@@ -100,13 +98,6 @@ public class CodeInput extends View {
         initViewOptions();
     }
 
-    public interface codeReadyListener {
-        // These methods are the different events and
-        // need to pass relevant arguments related to the event triggered
-        public void onCodeReady(Character[] code);
-
-    }
-
     private void initDefaultAttributes() {
         underlineStrokeWidth = getContext().getResources().getDimension(R.dimen.underline_stroke_width);
         underlineWidth = getContext().getResources().getDimension(R.dimen.underline_width);
@@ -139,7 +130,7 @@ public class CodeInput extends View {
         hintText = attributes.getString(R.styleable.core_area_hint_text);
         underlineAmount = attributes.getInt(R.styleable.core_area_codes, underlineAmount);
         textColor = attributes.getInt(R.styleable.core_area_text_color, textColor);
-        
+
         attributes.recycle();
     }
 
@@ -229,7 +220,7 @@ public class CodeInput extends View {
         inputmethodmanager.viewClicked(this);
     }
 
-    private void hideKeyBoard(){
+    private void hideKeyBoard() {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
@@ -237,6 +228,7 @@ public class CodeInput extends View {
     /**
      * Set Input type like InputType.TYPE_CLASS_PHONE, InputType.TYPE_CLASS_NUMBER
      * Doesn't work for password
+     *
      * @param inputType
      */
     public void setInputType(int inputType) {
@@ -290,37 +282,6 @@ public class CodeInput extends View {
         return inputText(text);
     }
 
-
-    /**
-     * Set Code
-     *
-     * @param code code to set
-     */
-    public void setCode(final String code) {
-        if (underlined) {
-            startAnimation();
-        }
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                StringBuilder stringBuilder;
-                while (characters.size() >= code.toCharArray().length && characters.size() != 0) {
-                    characters.pop();
-                }
-                for (char c : code.toCharArray()) {
-                    stringBuilder = new StringBuilder(KEYCODE);
-                    stringBuilder.append(c);
-                    inputText(String.valueOf(stringBuilder));
-                }
-                if (characters.isEmpty()) {
-                    hideKeyBoard();
-                    reverseAnimation();
-                }
-            }
-        }, animationDuration);
-    }
-
     /**
      * String text
      * Pass empty string to remove text
@@ -366,10 +327,10 @@ public class CodeInput extends View {
             Underline sectionpath = underlines[i];
             float fromX = 0;
             float toX = 0;
-            if ( i > 0){
+            if (i > 0) {
                 fromX = sectionpath.getFromX() + reduction + padding;
                 toX = sectionpath.getToX() - reduction + padding;
-            }else {
+            } else {
                 fromX = sectionpath.getFromX() + reduction;
                 toX = sectionpath.getToX() - reduction;
             }
@@ -410,6 +371,43 @@ public class CodeInput extends View {
 
     public Character[] getCode() {
         return characters.toArray(new Character[underlineAmount]);
+    }
+
+    /**
+     * Set Code
+     *
+     * @param code code to set
+     */
+    public void setCode(final String code) {
+        if (underlined) {
+            startAnimation();
+        }
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                StringBuilder stringBuilder;
+                while (characters.size() >= code.toCharArray().length && characters.size() != 0) {
+                    characters.pop();
+                }
+                for (char c : code.toCharArray()) {
+                    stringBuilder = new StringBuilder(KEYCODE);
+                    stringBuilder.append(c);
+                    inputText(String.valueOf(stringBuilder));
+                }
+                if (characters.isEmpty()) {
+                    hideKeyBoard();
+                    reverseAnimation();
+                }
+            }
+        }, animationDuration);
+    }
+
+    public interface codeReadyListener {
+        // These methods are the different events and
+        // need to pass relevant arguments related to the event triggered
+        public void onCodeReady(Character[] code);
+
     }
 
     /**

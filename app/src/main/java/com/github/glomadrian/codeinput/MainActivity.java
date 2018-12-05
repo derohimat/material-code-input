@@ -10,17 +10,18 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    CodeInput cInput = (CodeInput) findViewById(R.id.pairing);
-    cInput.setCodeReadyListener(new CodeInput.codeReadyListener() {
-      @Override
-      public void onCodeReady(Character[] code) {
-        // Code has been entered ....
-        Toast.makeText(MainActivity.this,"code entered is : "+ Arrays.toString(code),Toast.LENGTH_SHORT).show();
-      }
-    });
-  }
+        CodeInput cInput = findViewById(R.id.pairing);
+        cInput.setCodeReadyListener(new CodeInput.codeReadyListener() {
+            @Override
+            public void onCodeReady(Character[] code) {
+                // Code has been entered ....
+                Toast.makeText(MainActivity.this, "code entered is : " + Arrays.toString(code), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
